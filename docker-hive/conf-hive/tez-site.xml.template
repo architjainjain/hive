@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Tez configuration for HIVE-27126 cluster: runs on YARN, not local mode.
+  tez.tar.gz is uploaded to HDFS by start-hive-local-cluster.sh.
+-->
+<configuration>
+    <!-- Tez lib URIs on HDFS (uploaded during cluster init by start script) -->
+    <property>
+      <name>tez.lib.uris</name>
+      <value>hdfs://namenode:8020/apps/tez/tez.tar.gz</value>
+    </property>
+    <!-- YARN mode (not local) -->
+    <property>
+      <name>tez.local.mode</name>
+      <value>false</value>
+    </property>
+    <!-- Disable client/AM version check (Tez 0.10.5 vs Hive 4.3.0-SNAPSHOT) -->
+    <property>
+      <name>tez.am.disable.client-version-check</name>
+      <value>true</value>
+    </property>
+    <!-- AM resource: 512 MB is enough for testing -->
+    <property>
+      <name>tez.am.resource.memory.mb</name>
+      <value>512</value>
+    </property>
+    <property>
+      <name>tez.am.java.opts</name>
+      <value>-Xmx400m</value>
+    </property>
+    <!-- Task resource: 512 MB -->
+    <property>
+      <name>tez.task.resource.memory.mb</name>
+      <value>512</value>
+    </property>
+    <property>
+      <name>tez.task.launch.cmd-opts</name>
+      <value>-Xmx400m</value>
+    </property>
+    <!-- Queue -->
+    <property>
+      <name>tez.queue.name</name>
+      <value>default</value>
+    </property>
+    <!-- Session mode -->
+    <property>
+      <name>tez.am.mode.session</name>
+      <value>true</value>
+    </property>
+    <!-- Disable Tez UI web service (not needed for testing) -->
+    <property>
+      <name>tez.am.tez-ui.webservice.enable</name>
+      <value>false</value>
+    </property>
+    <!-- Distributed mode: do not use local fetch optimization -->
+    <property>
+      <name>tez.runtime.optimize.local.fetch</name>
+      <value>false</value>
+    </property>
+    <!-- Session client timeout (5 minutes for test queries) -->
+    <property>
+      <name>tez.session.client.timeout.secs</name>
+      <value>300</value>
+    </property>
+    <!-- Staging dir on HDFS -->
+    <property>
+      <name>tez.staging-dir</name>
+      <value>/tmp/tez-staging</value>
+    </property>
+</configuration>

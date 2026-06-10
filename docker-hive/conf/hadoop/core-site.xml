@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!-- Hadoop core config for HIVE-27126 test cluster -->
+<configuration>
+  <property><name>fs.defaultFS</name><value>hdfs://namenode:8020</value></property>
+  <property><name>hadoop.proxyuser.hive.hosts</name><value>*</value></property>
+  <property><name>hadoop.proxyuser.hive.groups</name><value>*</value></property>
+  <property><name>hadoop.proxyuser.root.hosts</name><value>*</value></property>
+  <property><name>hadoop.proxyuser.root.groups</name><value>*</value></property>
+</configuration>

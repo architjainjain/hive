@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hive configuration for Hive local Docker cluster.
+  Key difference from default: Tez runs on YARN (not local mode),
+  and Queue metrics display is ENABLED (2s refresh).
+-->
+<configuration>
+    <!-- Transaction support -->
+    <property>
+      <name>hive.support.concurrency</name>
+      <value>true</value>
+    </property>
+    <property>
+      <name>hive.txn.manager</name>
+      <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>
+    </property>
+    <!-- Security - disabled for testing -->
+    <property>
+      <name>hive.server2.enable.doAs</name>
+      <value>false</value>
+    </property>
+    <!-- ===== EXECUTION ENGINE: Tez on YARN (NOT local mode) ===== -->
+    <property>
+      <name>hive.execution.engine</name>
+      <value>tez</value>
+    </property>
+    <property>
+      <name>tez.local.mode</name>
+      <value>false</value>
+    </property>
+    <property>
+      <name>mapreduce.framework.name</name>
+      <value>yarn</value>
+    </property>
+    <property>
+      <name>hive.exec.submit.local.task.via.child</name>
+      <value>true</value>
+    </property>
+    <!-- ===== Queue Metrics Display (ENABLED, 2s refresh) ===== -->
+    <property>
+      <name>hive.tez.queue.metrics.refresh.interval</name>
+      <value>2s</value>
+      <description>HIVE-27126: Refresh interval for YARN queue resource metrics display.
+        Set to a positive value to enable; 0 (default) disables the feature.</description>
+    </property>
+    <!-- In-place progress (required to see queue metrics in the terminal) -->
+    <property>
+      <name>hive.tez.exec.inplace.progress</name>
+      <value>false</value>
+    </property>
+    <!-- Print query execution summary -->
+    <property>
+      <name>hive.tez.exec.print.summary</name>
+      <value>true</value>
+    </property>
+    <!-- Tez YARN queue for metrics -->
+    <property>
+      <name>tez.queue.name</name>
+      <value>default</value>
+    </property>
+    <!-- YARN RM addresses (used by YarnClient inside HIVE-27126 metrics collector) -->
+    <property>
+      <name>yarn.resourcemanager.address</name>
+      <value>resourcemanager:8032</value>
+    </property>
+    <property>
+      <name>yarn.resourcemanager.webapp.address</name>
+      <value>resourcemanager:8088</value>
+    </property>
+    <!-- ===== Storage paths ===== -->
+    <property>
+      <name>hive.metastore.warehouse.dir</name>
+      <value>hdfs://namenode:8020/user/hive/warehouse</value>
+    </property>
+    <property>
+      <name>hive.exec.scratchdir</name>
+      <value>${HIVE_SCRATCH_DIR}</value>
+    </property>
+    <property>
+      <name>hive.exec.local.scratchdir</name>
+      <value>${HIVE_SCRATCH_DIR}</value>
+    </property>
+    <property>
+      <name>hive.query.results.cache.directory</name>
+      <value>/opt/hive/scratch/_resultscache_</value>
+    </property>
+    <!-- Metastore auth -->
+    <property>
+      <name>hive.metastore.event.db.notification.api.auth</name>
+      <value>false</value>
+    </property>
+    <!-- Compactor -->
+    <property>
+      <name>hive.compactor.crud.query.based</name>
+      <value>true</value>
+    </property>
+    <property>
+      <name>hive.compactor.worker.threads</name>
+      <value>1</value>
+    </property>
+    <!-- User install directory -->
+    <property>
+      <name>hive.user.install.directory</name>
+      <value>/opt/hive/install_dir</value>
+    </property>
+    <!-- No external/LLAP sessions for this YARN cluster mode -->
+    <property>
+      <name>hive.server2.tez.initialize.default.sessions</name>
+      <value>false</value>
+    </property>
+    <property>
+      <name>hive.server2.tez.use.external.sessions</name>
+      <value>false</value>
+    </property>
+    <property>
+      <name>hive.llap.execution.mode</name>
+      <value>none</value>
+    </property>
+</configuration>
