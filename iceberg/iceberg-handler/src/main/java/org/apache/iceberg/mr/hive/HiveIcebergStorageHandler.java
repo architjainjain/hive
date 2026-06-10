@@ -1657,10 +1657,7 @@ public class HiveIcebergStorageHandler extends DefaultStorageHandler implements 
   @VisibleForTesting
   static void overlayTableProperties(Configuration configuration, TableDesc tableDesc, Map<String, String> map) {
     Properties props = tableDesc.getProperties();
-
-    Maps.fromProperties(props).entrySet().stream()
-      .filter(entry -> !map.containsKey(entry.getKey())) // map overrides tableDesc properties
-      .forEach(entry -> map.put(entry.getKey(), entry.getValue()));
+    props.forEach((key, value) -> map.putIfAbsent((String) key, (String) value));
 
     String location;
     Schema schema;
@@ -2309,6 +2306,7 @@ public class HiveIcebergStorageHandler extends DefaultStorageHandler implements 
     }
 
     Set<Partition> partitions = Sets.newHashSet();
+    String defaultPartitionName = HiveConf.getVar(conf, ConfVars.DEFAULT_PARTITION_NAME);
 
     try (CloseableIterable<FileScanTask> tasks = scan.planFiles()) {
       FluentIterable.from(tasks)
@@ -2319,8 +2317,8 @@ public class HiveIcebergStorageHandler extends DefaultStorageHandler implements 
             PartitionData partitionData = IcebergTableUtil.toPartitionData(task.partition(), spec.partitionType());
             String partName = spec.partitionToPath(partitionData);
 
-            Map<String, String> partSpecMap = Maps.newLinkedHashMap();
-            Warehouse.makeSpecFromName(partSpecMap, new Path(partName), null);
+            Map<String, String> partSpecMap =
+                IcebergTableUtil.makeSpecFromName(partName, spec, partitionData, defaultPartitionName);
 
             DummyPartition partition = new DummyPartition(hmsTable, partName, partSpecMap);
             partitions.add(partition);
