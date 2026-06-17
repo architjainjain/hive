@@ -7,7 +7,7 @@
 # all pass/fail checks.
 #
 # Prerequisites: cluster must be running
-#   (./docker-hive/scripts/build/deploy.sh or ./docker-hive/scripts/build/deploy.sh --skip-build)
+#   (./docker-hive/scripts/build-scripts/deploy.sh or ./docker-hive/scripts/build-scripts/deploy.sh --skip-build)
 #
 # Usage:
 #   ./docker-hive/scripts/test/test-queue-metrics.sh              # create dataset, keep it after test (default)
@@ -68,7 +68,7 @@ fi
 echo
 
 if ! docker exec hive-local-hiveserver2 nc -z localhost 10000 2>/dev/null; then
-  fail "HiveServer2 is not running. Start the cluster first:\n  ./docker-hive/scripts/build/deploy.sh --skip-build"
+  fail "HiveServer2 is not running. Start the cluster first:\n  ./docker-hive/scripts/build-scripts/deploy.sh --skip-build"
 fi
 ok "Cluster is up — HiveServer2 reachable"
 echo
